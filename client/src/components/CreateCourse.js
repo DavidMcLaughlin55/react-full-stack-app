@@ -34,7 +34,7 @@ class CreateCourse extends Component {
                                 <textarea id="materialsNeeded" name="materialsNeeded"></textarea>
                             </div>
                         </div>
-                        <button className="button" type="submit">Create Course</button><button class="button button-secondary" onclick="event.preventDefault(); location.href='index.html';">Cancel</button>
+                        <button className="button" type="submit">Create Course</button><button class="button button-secondary" onclick="event.preventDefault(); location.href='/';">Cancel</button>
                     </form>
                 </div>
             </main>

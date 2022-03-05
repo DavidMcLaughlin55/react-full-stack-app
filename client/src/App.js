@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 // App Component Imports
 import Header from './components/Header';
@@ -9,6 +9,7 @@ import CreateCourse from './components/CreateCourse';
 import UpdateCourse from './components/UpdateCourse';
 import UserSignUp from './components/UserSignUp';
 import UserSignIn from './components/UserSignIn';
+import UserSignOut from './components/UserSignOut';
 
 function App() {
 
@@ -17,7 +18,13 @@ function App() {
       <div className="container">
         <Header />
         <Routes>
-
+          <Route path='/' element={<Courses />} />
+          <Route path='/courses/create' element={<CreateCourse />} />
+          <Route path='/courses/:id/update' element={<UpdateCourse />} />
+          <Route path='/courses/:id' element={<CourseDetail />} />
+          <Route path='/signin' element={<UserSignIn />} />
+          <Route path='/signup' element={<UserSignUp />} />
+          <Route path='/signout' element={<UserSignOut />} />
         </Routes>
       </div>
     </BrowserRouter>
