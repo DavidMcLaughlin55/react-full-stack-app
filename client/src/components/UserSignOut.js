@@ -1,14 +1,11 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Courses from './Courses';
 
-class UserSignOut extends Component {
+function UserSignOut() {
 
-    render() {
-
-        return (
-            <Courses />
-        );
-    }
+    return (
+        <Courses />
+    );
 }
 
 export default UserSignOut;

@@ -27,7 +27,7 @@ function App() {
           <Route path='/signout' element={<UserSignOut />} />
         </Routes>
       </div>
-    </BrowserRouter>
+    </BrowserRouter >
   );
 }
 
