@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 function CreateCourse() {
 
@@ -32,7 +33,10 @@ function CreateCourse() {
                             <textarea id="materialsNeeded" name="materialsNeeded"></textarea>
                         </div>
                     </div>
-                    <button className="button" type="submit">Create Course</button><button class="button button-secondary" onclick="event.preventDefault(); location.href='/';">Cancel</button>
+                    <Link to="/">
+                        <button className="button" type="submit">Create Course</button>
+                        <button class="button button-secondary" onclick="event.preventDefault(); location.href='/';">Cancel</button>
+                    </Link>
                 </form>
             </div>
         </main>
