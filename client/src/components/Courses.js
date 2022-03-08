@@ -5,38 +5,27 @@ import { Link } from 'react-router-dom';
 function Courses() {
 
     const [courses, setCourses] = useState([]);
-    let [list, setList] = useState();
 
     useEffect(() => {
         fetch('http://localhost:5000/api/courses')
             .then(res => res.json())
             .then(data => {
-                setCourses({ courses: data });
+                setCourses(data);
             })
             .catch(error => {
                 console.log('Could not fetch courses data', error);
             })
     }, [])
 
-    console.log(courses);
-
-    if (courses.length > 0) {
-        let courseList;
-        courseList = courses.map(course => (
-            <Link className="course--module course--link" to={`/courses/${course.id}`} key={course.id}>
-                <h2 className="course--label">Course</h2>
-                <h3 className="course--title">{course.title}</h3>
-            </Link>
-        ));
-        setList({ list: courseList });
-    };
-
-    console.log(list);
-
     return (
         <main>
             <div className="wrap main--grid">
-                {list}
+                {courses.map(course => (
+                    <Link className="course--module course--link" to={`/courses/${course.id}`} key={course.id}>
+                        <h2 className="course--label">Course</h2>
+                        <h3 className="course--title">{course.title}</h3>
+                    </Link>
+                ))}
                 <Link className="course--module course--add--module" to="/courses/create">
                     <span className="course--add--title">
                         <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"

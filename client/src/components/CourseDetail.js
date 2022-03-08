@@ -4,25 +4,20 @@ import { NavLink, useParams } from 'react-router-dom';
 function CourseDetail() {
 
     const [course, setCourse] = useState('');
+    const [user, setUser] = useState('');
     const { id } = useParams();
 
     useEffect(() => {
         fetch(`http://localhost:5000/api/courses/${id}`)
             .then(res => res.json())
             .then(data => {
-                setCourse({ course: data });
-                console.log(data);
+                setCourse(data);
+                setUser(data.User);
             })
             .catch(error => {
                 console.log('Could not fetch course data', error);
             })
     }, [id]);
-
-    if (course) {
-        console.log(course.id);
-        console.log(course.title);
-        console.log(course.description);
-    }
 
     return (
         <main>
@@ -41,7 +36,7 @@ function CourseDetail() {
                         <div>
                             <h3 className="course--detail--title">Course</h3>
                             <h4 className="course--name">{course.title}</h4>
-                            <p>By Joe Smith</p>
+                            <p>By {user.firstName} {user.lastName}</p>
 
                             <p>High-end furniture projects are great to dream about. But unless you have a well-equipped shop and some serious woodworking experience to draw on, it can be difficult to turn the dream into a reality.</p>
 
@@ -57,7 +52,7 @@ function CourseDetail() {
                         </div>
                         <div>
                             <h3 className="course--detail--title">Estimated Time</h3>
-                            <p>14hrs</p>
+                            <p>{course.estimatedTime}</p>
 
                             <h3 className="course--detail--title">Materials Needed</h3>
                             <ul className="course--detail--list">
