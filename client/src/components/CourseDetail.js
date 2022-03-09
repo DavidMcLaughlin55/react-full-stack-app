@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import ReactMarkdown from 'react-markdown';
 import { NavLink, useParams } from 'react-router-dom';
+import ReactMarkdown from 'react-markdown';
+import axios from 'axios';
 
 function CourseDetail() {
 
@@ -9,24 +10,21 @@ function CourseDetail() {
     const { id } = useParams();
 
     useEffect(() => {
-        fetch(`http://localhost:5000/api/courses/${id}`)
-            .then(res => res.json())
-            .then(data => {
-                setCourse(data);
-                setUser(data.User);
+        axios.get(`http://localhost:5000/api/courses/${id}`)
+            .then(res => {
+                setCourse(res.data);
+                setUser(res.data.User);
             })
             .catch(error => {
                 console.log('Could not fetch course data', error);
             })
     }, [id]);
 
-    console.log(course);
-
     return (
         <main>
             <div className="actions--bar">
                 <div className="wrap">
-                    <NavLink className="button" to="/courses/:id/update">Update Course</NavLink>
+                    <NavLink className="button" to={`/courses/${course.id}/update`}>Update Course</NavLink>
                     <NavLink className="button" to="#">Delete Course</NavLink>
                     <NavLink className="button button-secondary" to="/">Return to List</NavLink>
                 </div>
