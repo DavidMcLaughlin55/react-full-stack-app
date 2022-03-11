@@ -1,61 +1,70 @@
 import React, { createContext, useState } from 'react';
 import axios from 'axios';
 
-const api = axios.create({
-    baseURL: 'http://localhost:5000/api'
-});
-
 export const CourseAppContext = createContext();
 
 export const Provider = (props) => {
 
-    // const [authenticatedUser, setAuthenticatedUser] = useState('');
-    // const [emailAddress, setEmailAddress] = useState('');
-    // const [password, setPassword] = useState('');
-    const [data, setData] = useState([]);
-    const [resErrors, setResErrors] = useState([]);
+    const [authenticatedUser, setAuthenticatedUser] = useState('');
 
-
-    // Action to POST a new course.
-    const createNewCourse = async () => {
-        let res = await api.post('/courses')
+    // Action to create user
+    const createUser = async (user) => {
+        e.preventDefault();
+        const res = await axios.post('http://localhost:5000/api/users')
         if (res.status === 201) {
-            console.log(res);
-            setData(res.data);
-            return data;
+            return [];
         } else if (res.status === 400) {
-            console.log(res.errors);
-            setResErrors(res.errors);
-            return resErrors;
+            return res.data.errors;
+        } else {
+            throw new Error();
         };
     };
 
-    // // Action to GET authenticated user on sign in. 
-    // const signIn = async (emailAddress, password) => {
-    //     const res = await api.get('/users', { emailAddress, password });
-    //     if (res.status === 200) {
-    //         console.log(res);
-    //     } else {
-    //         throw new Error();
-    //     }
-    // };
+    // GETs user from API
+    const getUser = async (emailAddress, password) => {
+        const encodedCredentials = btoa(`${emailAddress}:${password}`);
+        const res = await axios.get('http://localhost:5000/api/users', {
+            headers: {
+                'Content-Type': 'application/json charset=utf-8',
+                'Authorization': `Basic : ${encodedCredentials}`,
+            },
+            body: JSON.stringify(body),
+        });
+        if (res.status === 200) {
+            return res.data;
+        } else if (res.status === 400) {
+            console.log('Could not get user.')
+            return null;
+        } else {
+            throw new Error();
+        };
+    };
+
+    // Action to find and authenticate user on sign in. 
+    const userSignIn = async (emailAddress, password) => {
+        const user = await getUser(emailAddress, password);
+        if (user !== null) {
+            setAuthenticatedUser(user);
+        }
+        return user;
+    };
 
     // // Action to signout user.
-    // const signOut = () => {
-    //     setAuthenticatedUser(null);
-    // }
+    const userSignOut = () => {
+        setAuthenticatedUser(null);
+    };
 
     return (
         <CourseAppContext.Provider value={{
-            data,
-            resErrors,
             actions: {
-                createCourse: createNewCourse,
-                // signInUser: signIn,
-                // signOutUser: signOut,
+                createUser: createUser,
+                getUser: getUser,
+                userSignIn: userSignIn,
+                userSignOut: userSignOut,
             }
         }}>
             {props.children}
         </CourseAppContext.Provider>
     );
 };
+

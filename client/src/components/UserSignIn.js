@@ -1,20 +1,52 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useContext } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { CourseAppContext } from '../context/context';
+import ValidationErrors from './ValidationErrors';
+import axios from 'axios';
 
 function UserSignIn() {
+
+    const { actions } = useContext(CourseAppContext);
+    const [emailAddress, setEmailAddress] = useState('');
+    const [password, setPassword] = useState('');
+    const [resErrors, setResErrors] = useState([]);
+
+    // Brings user back to home page.
+    let navigate = useNavigate();
+
+    const handleCancel = (e) => {
+        e.preventDefault();
+        navigate('/');
+    };
+
+    // Function to sign-in user on submission of form.
+    const signIn = (e) => {
+        e.preventDefault();
+        actions.userSignIn(emailAddress, password)
+            .then((user) => {
+                if (user === null) {
+                    setResErrors(errors);
+                } else {
+                    navigate('/');
+                }
+            }).catch(error => {
+                console.log('Sign in failed.', error);
+                // navigate('/error');
+            });
+    };
 
     return (
         <main>
             <div className="form--centered">
                 <h2>Sign In</h2>
-
-                <form>
-                    <label for="emailAddress">Email Address</label>
-                    <input id="emailAddress" name="emailAddress" type="email" value=""></input>
-                    <label for="password">Password</label>
-                    <input id="password" name="password" type="password" value=""></input>
-                    <Link to="/users"><button class="button" type="submit">Sign In</button></Link>
-                    <Link to="/"><button className="button button-secondary" onclick='signInUser'>Cancel</button></Link>
+                {(resErrors) ? <ValidationErrors errorMessages={resErrors} /> : null}
+                <form onSubmit={signIn}>
+                    <label htmlFor="emailAddress">Email Address</label>
+                    <input id="emailAddress" name="emailAddress" type="email" value={emailAddress}></input>
+                    <label htmlFor="password">Password</label>
+                    <input id="password" name="password" type="password" value={password}></input>
+                    <button className="button" type="submit">Sign In</button>
+                    <button className="button button-secondary" onClick={handleCancel}>Cancel</button>
                 </form>
                 <p>Don't have a user account? Click here to <Link to="/signup">sign up</Link>!</p>
 

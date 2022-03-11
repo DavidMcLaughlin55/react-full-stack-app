@@ -8,6 +8,7 @@ function UpdateCourse() {
     const [user, setUser] = useState('');
     const { id } = useParams();
 
+    // GETs selected course to update.
     useEffect(() => {
         axios.get(`http://localhost:5000/api/courses/${id}`)
             .then(res => {
@@ -31,11 +32,11 @@ function UpdateCourse() {
         <main>
             <div className="wrap">
                 <h2>Update Course</h2>
-                <form>
+                <form onSubmit="update course">
                     <div className="main--flex">
                         <div>
                             <label htmlFor="courseTitle">Course Title</label>
-                            <input id="courseTitle" name="courseTitle" type="text" value={course.title}></input>
+                            <input id="courseTitle" name="courseTitle" type="text" defaultValue={course.title}></input>
 
                             <p>By {user.firstName} {user.lastName}</p>
 
@@ -44,7 +45,7 @@ function UpdateCourse() {
                         </div>
                         <div>
                             <label htmlFor="estimatedTime">Estimated Time</label>
-                            <input id="estimatedTime" name="estimatedTime" type="text" value={course.estimatedTime}></input>
+                            <input id="estimatedTime" name="estimatedTime" type="text" defaultValue={course.estimatedTime}></input>
 
                             <label htmlFor="materialsNeeded">Materials Needed</label>
                             <textarea id="materialsNeeded" name="materialsNeeded" defaultValue={course.materialsNeeded}></textarea>
