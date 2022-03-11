@@ -2,11 +2,10 @@ import React, { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { CourseAppContext } from '../context/context';
 import ValidationErrors from './ValidationErrors';
-import axios from 'axios';
 
 function UserSignIn() {
 
-    const { actions } = useContext(CourseAppContext);
+    const { actions, errors } = useContext(CourseAppContext);
     const [emailAddress, setEmailAddress] = useState('');
     const [password, setPassword] = useState('');
     const [resErrors, setResErrors] = useState([]);
@@ -22,6 +21,7 @@ function UserSignIn() {
     // Function to sign-in user on submission of form.
     const signIn = (e) => {
         e.preventDefault();
+        console.log(`${emailAddress} and ${password} are coming through.`);
         actions.userSignIn(emailAddress, password)
             .then((user) => {
                 if (user === null) {
@@ -42,9 +42,9 @@ function UserSignIn() {
                 {(resErrors) ? <ValidationErrors errorMessages={resErrors} /> : null}
                 <form onSubmit={signIn}>
                     <label htmlFor="emailAddress">Email Address</label>
-                    <input id="emailAddress" name="emailAddress" type="email" value={emailAddress}></input>
+                    <input id="emailAddress" name="emailAddress" type="email" value={emailAddress} onChange={(e) => setEmailAddress(e.target.value)}></input>
                     <label htmlFor="password">Password</label>
-                    <input id="password" name="password" type="password" value={password}></input>
+                    <input id="password" name="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)}></input>
                     <button className="button" type="submit">Sign In</button>
                     <button className="button button-secondary" onClick={handleCancel}>Cancel</button>
                 </form>

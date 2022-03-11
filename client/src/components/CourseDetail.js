@@ -10,6 +10,10 @@ function CourseDetail() {
     const { id } = useParams();
 
     useEffect(() => {
+        getCourse();
+    }, []);
+
+    const getCourse = () => {
         axios.get(`http://localhost:5000/api/courses/${id}`)
             .then(res => {
                 setCourse(res.data);
@@ -18,14 +22,24 @@ function CourseDetail() {
             .catch(error => {
                 console.log('Could not fetch course data', error);
             })
-    }, [id]);
+    };
+
+    const deleteCourse = () => {
+        axios.delete(`http://localhost:5000/api/courses/${id}`)
+            .then(res => {
+                console.log('Course Deleted.')
+            })
+            .catch(error => {
+                console.log('Could not delete course', error);
+            })
+    };
 
     return (
         <main>
             <div className="actions--bar">
                 <div className="wrap">
                     <NavLink className="button" to={`/courses/${course.id}/update`}>Update Course</NavLink>
-                    <NavLink className="button" to="#">Delete Course</NavLink>
+                    <button className="button" onClick={deleteCourse}>Delete Course</button>
                     <NavLink className="button button-secondary" to="/">Return to List</NavLink>
                 </div>
             </div>

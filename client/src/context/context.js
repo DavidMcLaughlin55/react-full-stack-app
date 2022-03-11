@@ -6,15 +6,15 @@ export const CourseAppContext = createContext();
 export const Provider = (props) => {
 
     const [authenticatedUser, setAuthenticatedUser] = useState('');
+    const [errors, setErrors] = useState([]);
 
     // Action to create user
     const createUser = async (user) => {
-        e.preventDefault();
         const res = await axios.post('http://localhost:5000/api/users')
         if (res.status === 201) {
             return [];
         } else if (res.status === 400) {
-            return res.data.errors;
+            return setErrors(res.data.errors);
         } else {
             throw new Error();
         };
@@ -22,17 +22,22 @@ export const Provider = (props) => {
 
     // GETs user from API
     const getUser = async (emailAddress, password) => {
-        const encodedCredentials = btoa(`${emailAddress}:${password}`);
-        const res = await axios.get('http://localhost:5000/api/users', {
+        console.log(`${emailAddress}: ${password}`);
+        emailAddress = btoa(emailAddress);
+        password = btoa(password);
+        const res = await axios.get('http://localhost:5000/api/users', { emailAddress, password }, {
             headers: {
                 'Content-Type': 'application/json charset=utf-8',
-                'Authorization': `Basic : ${encodedCredentials}`,
             },
-            body: JSON.stringify(body),
-        });
+            auth: {
+                emailAddress: `${emailAddress}`,
+                password: `${password}`,
+            },
+        }
+        );
         if (res.status === 200) {
             return res.data;
-        } else if (res.status === 400) {
+        } else if (res.status === 401) {
             console.log('Could not get user.')
             return null;
         } else {
@@ -56,6 +61,7 @@ export const Provider = (props) => {
 
     return (
         <CourseAppContext.Provider value={{
+            errors,
             actions: {
                 createUser: createUser,
                 getUser: getUser,

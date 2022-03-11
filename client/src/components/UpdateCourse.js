@@ -10,6 +10,10 @@ function UpdateCourse() {
 
     // GETs selected course to update.
     useEffect(() => {
+        getCourse();
+    }, []);
+
+    const getCourse = () => {
         axios.get(`http://localhost:5000/api/courses/${id}`)
             .then(res => {
                 setCourse(res.data);
@@ -18,7 +22,18 @@ function UpdateCourse() {
             .catch(error => {
                 console.log('Could not fetch course data', error);
             })
-    }, [id]);
+    };
+
+    const updateCourse = (e) => {
+        e.preventDefault();
+        axios.put(`http://localhost:5000/api/courses/${id}`)
+            .then(res => {
+                console.log('Course has been updated.');
+            })
+            .catch(error => {
+                console.log('Could not update course', error);
+            })
+    };
 
     // Brings user back to home page.
     let navigate = useNavigate();
@@ -32,7 +47,7 @@ function UpdateCourse() {
         <main>
             <div className="wrap">
                 <h2>Update Course</h2>
-                <form onSubmit="update course">
+                <form onSubmit={updateCourse}>
                     <div className="main--flex">
                         <div>
                             <label htmlFor="courseTitle">Course Title</label>
