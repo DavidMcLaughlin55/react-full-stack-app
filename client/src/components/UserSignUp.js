@@ -2,13 +2,12 @@ import React, { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { CourseAppContext } from '../context/context';
 import ValidationErrors from './ValidationErrors';
-import axios from 'axios';
+
 
 function UserSignUp() {
 
     const { actions, errors } = useContext(CourseAppContext);
 
-    const [user, setUser] = useState('');
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [emailAddress, setEmailAddress] = useState('');
@@ -23,21 +22,18 @@ function UserSignUp() {
         navigate('/');
     };
 
+    //Create a user
+
     // Function to sign up user on submission of form.
     const signUpUser = (e) => {
         e.preventDefault();
-        setUser([
-            firstName,
-            lastName,
-            emailAddress,
-            password
-        ]);
+        const user = { firstName, lastName, emailAddress, password };
         actions.createUser(user)
             .then(errors => {
                 if (errors.length) {
                     setResErrors(errors);
                 } else {
-                    actions.userSignIn(emailAddress, password)
+                    actions.userSignIn(user.emailAddress, user.password)
                         .then(() => {
                             navigate('/');
                         });
@@ -51,7 +47,7 @@ function UserSignUp() {
         <main>
             <div className="form--centered">
                 <h2>Sign Up</h2>
-                {(resErrors) ? <ValidationErrors errorMessages={resErrors} /> : null}
+                {resErrors ? (<ValidationErrors errorMessages={resErrors} />) : (null)}
                 <form onSubmit={signUpUser}>
                     <label htmlFor="firstName">First Name</label>
                     <input id="firstName" name="firstName" type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)}></input>

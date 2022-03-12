@@ -1,14 +1,17 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-// import ValidationErrors from './ValidationErrors';
-import axios from 'axios';
+import ValidationErrors from './ValidationErrors';
+import { CourseAppContext } from '../context/context';
 
 function CreateCourse() {
+
+    const { actions } = useContext(CourseAppContext);
 
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [estimatedTime, setEstimatedTime] = useState('');
     const [materialsNeeded, setMaterialsNeeded] = useState('');
+    const [resErrors, setResErrors] = useState([]);
 
     // Brings user back to home page.
     let navigate = useNavigate();
@@ -18,23 +21,24 @@ function CreateCourse() {
         navigate('/');
     };
 
-    const createCourse = (e) => {
+    const createNewCourse = (e) => {
         e.preventDefault();
-        axios.post('http://localhost:5000/api/courses')
-            .then(res => {
-                console.log('Course has been created.');
-            })
+        const newCourse = { title, description, estimatedTime, materialsNeeded };
+        actions.createCourse(newCourse)
+            .then(res => res.data)
             .catch(error => {
-                console.log('Could not create course', error);
+                console.log('Could not create new course', error);
+                setResErrors(error.errors)
             })
     };
+
 
     return (
         <main>
             <div className="wrap">
                 <h2>Create Course</h2>
-                {/* {(resErrors) ? <ValidationErrors errorMessages={resErrors} /> : null} */}
-                <form onSubmit={createCourse}>
+                {resErrors ? <ValidationErrors errorMessages={resErrors} /> : null}
+                <form onSubmit={createNewCourse}>
                     <div className="main--flex">
                         <div>
                             <label htmlFor="courseTitle">Course Title</label>

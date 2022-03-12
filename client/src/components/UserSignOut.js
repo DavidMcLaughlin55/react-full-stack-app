@@ -1,10 +1,10 @@
 import React from 'react';
-import Courses from './Courses';
+import { Navigate } from 'react-router-dom';
 
 function UserSignOut() {
 
     return (
-        <Courses />
+        <Navigate to="/" />
     );
 }
 
