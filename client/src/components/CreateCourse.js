@@ -1,6 +1,5 @@
 import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import ValidationErrors from './ValidationErrors';
 import { CourseAppContext } from '../context/context';
 
 function CreateCourse() {
@@ -35,7 +34,6 @@ function CreateCourse() {
         <main>
             <div className="wrap">
                 <h2>Create Course</h2>
-                {resErrors ? <ValidationErrors errorMessages={resErrors} /> : null}
                 <form onSubmit={createNewCourse}>
                     <div className="main--flex">
                         <div>

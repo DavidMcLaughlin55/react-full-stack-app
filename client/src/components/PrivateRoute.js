@@ -1,19 +1,11 @@
-// import React, { useContext } from 'react';
-// import { Routes, Route, useNavigate } from 'react-router-dom';
-// import { CourseAppContext } from '../context/context';
+import React, { useContext } from 'react';
+import { Navigate } from 'react-router-dom';
+import { CourseAppContext } from '../context/context';
 
-// function PrivateRoute() {
+function PrivateRoute({ Component }) {
 
-//     let navigate = useNavigate();
+    const { authenticatedUser } = useContext(CourseAppContext);
 
-//     const { authenticatedUser } = useContext(CourseAppContext);
-
-//     return (
-//         <Routes>
-//             <Route {...authenticatedUser ? (<Courses />) : (navigate('/signin'))} />
-//             <Route {...authenticatedUser ? (<UpdateCourse />) : (navigate('/signin'))} />
-//         </Routes>
-//     )
-// };
-
-// export default PrivateRoute;
+    return authenticatedUser ? <Component /> : <Navigate to='/signin' />;
+};
+export default PrivateRoute;

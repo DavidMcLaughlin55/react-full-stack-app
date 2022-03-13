@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { CourseAppContext } from '../context/context';
+import ValidationErrors from './ValidationErrors';
 
 function UserSignUp() {
 
@@ -9,6 +10,7 @@ function UserSignUp() {
     const [lastName, setLastName] = useState('');
     const [emailAddress, setEmailAddress] = useState('');
     const [password, setPassword] = useState('');
+    const [errors, setErrors] = useState('');
 
     // Brings user back to home page.
     let navigate = useNavigate();
@@ -21,21 +23,23 @@ function UserSignUp() {
     // Function to sign up user on submission of form.
     const signUpUser = (e) => {
         e.preventDefault();
-        const user = { firstName, lastName, emailAddress, password };
+        const user = { firstName, lastName, emailAddress, password }; // New user payload
         console.log(user);
         actions.createUser(user)
             .then(errors => {
                 if (errors.length) {
                     console.log('Error signing up user.')
+                    setErrors(errors);
                 } else {
+                    console.log(`User ${user.firstName} ${user.lastName} created.`)
                     actions.userSignIn(emailAddress, password)
                         .then(() => {
                             navigate('/');
                         });
                 }
             })
-            .catch((error) => {
-                console.log(error);
+            .catch(err => {
+                console.log(err);
             });
     };
 
@@ -43,6 +47,7 @@ function UserSignUp() {
         <main>
             <div className="form--centered">
                 <h2>Sign Up</h2>
+                {errors ? <ValidationErrors errorMessages={errors} /> : null}
                 <form onSubmit={signUpUser}>
                     <label htmlFor="firstName">First Name</label>
                     <input id="firstName" name="firstName" type="text" placeholder="First Name" value={firstName} onChange={(e) => setFirstName(e.target.value)}></input>

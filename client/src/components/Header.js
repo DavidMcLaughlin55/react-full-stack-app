@@ -5,8 +5,6 @@ import { CourseAppContext } from '../context/context';
 function Header() {
 
     const { authenticatedUser } = useContext(CourseAppContext);
-    console.log(authenticatedUser);
-    const username = `${authenticatedUser.firstName} ${authenticatedUser.lastName}`;
 
     return (
         <header>
@@ -16,7 +14,7 @@ function Header() {
                     <ul className="header--signedout">
                         {authenticatedUser ? (
                             <React.Fragment>
-                                <li>Welcome, {username}!</li>
+                                <li>Welcome, {`${authenticatedUser.firstName} ${authenticatedUser.lastName}`}!</li>
                                 <li><Link to="/signout">Sign Out</Link></li>
                             </React.Fragment>
                         ) : (

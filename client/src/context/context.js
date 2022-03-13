@@ -1,11 +1,11 @@
 import React, { createContext, useState } from 'react';
-// import Cookies from 'js-cookie';
+import Cookies from 'js-cookie';
 import axios from 'axios';
 
 export const CourseAppContext = createContext();
 
 // fetchHander is a function to set headers and handle requests
-const axiosHandler = (path, method = 'GET', authRequired = false, credentials = null) => {
+const axiosHandler = (path, method = 'GET', body = null, authRequired = false, credentials = null) => {
     const url = 'http://localhost:5000/api' + path;
 
     const headerConfig = {
@@ -13,6 +13,10 @@ const axiosHandler = (path, method = 'GET', authRequired = false, credentials = 
         headers: {
             'Content-Type': 'application/json charset=utf-8',
         },
+    };
+
+    if (body !== null) {
+        headerConfig.body = body;
     };
 
     if (authRequired) {
@@ -25,12 +29,11 @@ const axiosHandler = (path, method = 'GET', authRequired = false, credentials = 
 
 export const Provider = (props) => {
 
-    // const [cookie, setCookie] = useState(Cookies.get('authenticatedUser'));
     const [authenticatedUser, setAuthenticatedUser] = useState('');
 
     // Action to create new course
-    const createCourse = async (newCourse, emailAddress, password) => {
-        const res = await axiosHandler('/courses', 'POST', newCourse, true, { emailAddress, password });
+    const createCourse = async (newCourse, user) => {
+        const res = await axiosHandler('/courses', 'POST', newCourse, true, user);
         if (res.status === 201) {
             console.log('Course has been created.');
         } else if (res.status === 400) {
@@ -70,13 +73,18 @@ export const Provider = (props) => {
         const user = await getUser(emailAddress, password);
         if (user !== null) {
             setAuthenticatedUser(user);
-        }
+            //Set cookie
+            Cookies.set('authenticatedUser', user, { expires: 1 });
+        };
         return user;
     };
 
     // // Action to signout user.
     const userSignOut = () => {
         setAuthenticatedUser(null);
+        //Remove cookie
+        Cookies.remove('authenticatedUser');
+        return authenticatedUser;
     };
 
     return (
