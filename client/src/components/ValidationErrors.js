@@ -6,8 +6,8 @@ function ValidationErrors({ errorMessages }) {
         <div className="validation--errors">
             <h3>Validation Errors</h3>
             <ul>
-                {errorMessages.map(error => (
-                    <li>{error}</li>
+                {errorMessages.map((error, i) => (
+                    <li key={i}>{error}</li>
                 ))}
             </ul>
         </div>

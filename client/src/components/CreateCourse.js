@@ -11,7 +11,6 @@ function CreateCourse() {
     const [description, setDescription] = useState('');
     const [estimatedTime, setEstimatedTime] = useState('');
     const [materialsNeeded, setMaterialsNeeded] = useState('');
-    const [resErrors, setResErrors] = useState([]);
 
     // Brings user back to home page.
     let navigate = useNavigate();
@@ -26,10 +25,9 @@ function CreateCourse() {
         const newCourse = { title, description, estimatedTime, materialsNeeded };
         actions.createCourse(newCourse)
             .then(res => res.data)
-            .catch(error => {
-                console.log('Could not create new course', error);
-                setResErrors(error.errors)
-            })
+            .catch((error) => {
+                console.log(error);
+            });
     };
 
 

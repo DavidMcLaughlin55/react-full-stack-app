@@ -1,22 +1,40 @@
 import React, { createContext, useState } from 'react';
-import axios from 'axios';
 // import Cookies from 'js-cookie';
+import axios from 'axios';
 
 export const CourseAppContext = createContext();
 
+// fetchHander is a function to set headers and handle requests
+const axiosHandler = (path, method = 'GET', authRequired = false, credentials = null) => {
+    const url = 'http://localhost:5000/api' + path;
+
+    const headerConfig = {
+        method,
+        headers: {
+            'Content-Type': 'application/json charset=utf-8',
+        },
+    };
+
+    if (authRequired) {
+        const encodedCredentials = btoa(`${credentials.emailAddress}:${credentials.password}`);
+        headerConfig.headers['Authorization'] = `Basic ${encodedCredentials}`;
+    };
+    return axios(url, headerConfig);
+};
+
+
 export const Provider = (props) => {
 
+    // const [cookie, setCookie] = useState(Cookies.get('authenticatedUser'));
     const [authenticatedUser, setAuthenticatedUser] = useState('');
-    const [errors, setErrors] = useState([]);
 
     // Action to create new course
-    const createCourse = async (newCourse) => {
-        const res = await axios.post('http://localhost:5000/api/courses', newCourse);
+    const createCourse = async (newCourse, emailAddress, password) => {
+        const res = await axiosHandler('/courses', 'POST', newCourse, true, { emailAddress, password });
         if (res.status === 201) {
             console.log('Course has been created.');
         } else if (res.status === 400) {
-            console.log('Coure could not be created.');
-            console.log(res.error.msg);
+            return res.data.errors;
         } else {
             throw new Error();
         }
@@ -24,30 +42,23 @@ export const Provider = (props) => {
 
     // Action to create user
     const createUser = async (user) => {
-        const res = await axios.post('http://localhost:5000/api/users', user)
+        const res = await axiosHandler('/users', 'POST', user);
+        console.log(user);
         if (res.status === 201) {
             return [];
         } else if (res.status === 400) {
-            console.log(res);
-            return setErrors(res.error);
+            return res.data.errors;
         } else {
             throw new Error();
         };
     };
 
-    // GETs user from API
+    // Function to GET user from API
     const getUser = async (emailAddress, password) => {
-        const encodedCredentials = btoa(`${emailAddress}:${password}`);
-        const res = await axios.get('http://localhost:5000/api/users', {
-            headers: {
-                'Content-Type': 'application/json charset=utf-8',
-                'Authorization': `Basic ${encodedCredentials}`
-            },
-        });
+        const res = await axiosHandler('/users', 'GET', null, true, { emailAddress, password });
         if (res.status === 200) {
             return res.data;
         } else if (res.status === 401) {
-            console.log('Could not get user.');
             return null;
         } else {
             throw new Error();
@@ -71,7 +82,6 @@ export const Provider = (props) => {
     return (
         <CourseAppContext.Provider value={{
             authenticatedUser,
-            errors,
             actions: {
                 createCourse: createCourse,
                 createUser: createUser,
