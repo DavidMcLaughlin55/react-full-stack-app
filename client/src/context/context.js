@@ -1,39 +1,44 @@
 import React, { createContext, useState } from 'react';
-import Cookies from 'js-cookie';
+// import Cookies from 'js-cookie';
 import axios from 'axios';
 
 export const CourseAppContext = createContext();
 
-// fetchHander is a function to set headers and handle requests
-const axiosHandler = (path, method = 'GET', body = null, authRequired = false, credentials = null) => {
+// fetchHandler is a function to set headers and handle requests
+const axiosHandler = (path, method, data = null, authRequired = false, credentials = null) => {
     const url = 'http://localhost:5000/api' + path;
 
     const headerConfig = {
         method,
         headers: {
-            'Content-Type': 'application/json charset=utf-8',
+            'Content-Type': 'application/json',
         },
     };
 
-    if (body !== null) {
-        headerConfig.body = body;
+    if (data !== null) {
+        headerConfig.body = data;
     };
 
     if (authRequired) {
         const encodedCredentials = btoa(`${credentials.emailAddress}:${credentials.password}`);
         headerConfig.headers['Authorization'] = `Basic ${encodedCredentials}`;
     };
+
     return axios(url, headerConfig);
 };
 
 
 export const Provider = (props) => {
 
-    const [authenticatedUser, setAuthenticatedUser] = useState('');
+    const [currentUser, setCurrentUser] = useState(null);
+    const [authenticatedUser, setAuthenticatedUser] = useState(null);
 
     // Action to create new course
-    const createCourse = async (newCourse, user) => {
-        const res = await axiosHandler('/courses', 'POST', newCourse, true, user);
+    const createCourse = async (newCourse, currentUser) => {
+        const email = currentUser.emailAddress;
+        const password = currentUser.password;
+        console.log(`${email} and ${password}`);
+        const res = await axiosHandler('/courses', 'POST', newCourse, true, { email, password });
         if (res.status === 201) {
             console.log('Course has been created.');
         } else if (res.status === 400) {
@@ -46,8 +51,8 @@ export const Provider = (props) => {
     // Action to create user
     const createUser = async (user) => {
         const res = await axiosHandler('/users', 'POST', user);
-        console.log(user);
         if (res.status === 201) {
+            console.log('User created');
             return [];
         } else if (res.status === 400) {
             return res.data.errors;
@@ -70,11 +75,10 @@ export const Provider = (props) => {
 
     // Action to find and authenticate user on sign in. 
     const userSignIn = async (emailAddress, password) => {
+        setCurrentUser({ emailAddress, password });
         const user = await getUser(emailAddress, password);
         if (user !== null) {
             setAuthenticatedUser(user);
-            //Set cookie
-            Cookies.set('authenticatedUser', user, { expires: 1 });
         };
         return user;
     };
@@ -82,13 +86,11 @@ export const Provider = (props) => {
     // // Action to signout user.
     const userSignOut = () => {
         setAuthenticatedUser(null);
-        //Remove cookie
-        Cookies.remove('authenticatedUser');
-        return authenticatedUser;
     };
 
     return (
         <CourseAppContext.Provider value={{
+            currentUser,
             authenticatedUser,
             actions: {
                 createCourse: createCourse,
