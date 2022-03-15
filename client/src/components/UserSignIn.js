@@ -23,7 +23,6 @@ function UserSignIn() {
         e.preventDefault();
         actions.userSignIn(emailAddress, password)
             .then((user) => {
-                console.log(user);
                 if (user === null) {
                     return setErrors('User could not be signed in.');
                 } else {

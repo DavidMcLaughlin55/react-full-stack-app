@@ -31,8 +31,6 @@ function UserSignUp() {
                     console.log('Error signing up user.');
                     setErrors(errors);
                 } else {
-                    console.log(`User ${user.firstName} ${user.lastName} created.`);
-                    console.log(`${emailAddress} ${password}`);
                     actions.userSignIn(emailAddress, password)
                         .then(() => {
                             navigate('/');

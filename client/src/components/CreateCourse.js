@@ -10,6 +10,7 @@ function CreateCourse() {
     const [description, setDescription] = useState('');
     const [estimatedTime, setEstimatedTime] = useState('');
     const [materialsNeeded, setMaterialsNeeded] = useState('');
+    const [errors, setErrors] = useState([]);
 
     // Brings user back to home page.
     let navigate = useNavigate();
@@ -21,11 +22,20 @@ function CreateCourse() {
 
     const createNewCourse = (e) => {
         e.preventDefault();
-        const newCourse = { title, description, estimatedTime, materialsNeeded };
+        const userId = authenticatedUser.id;
+        console.log(authenticatedUser.id);
+        const newCourse = { userId, title, description, estimatedTime, materialsNeeded };
         actions.createCourse(newCourse, authenticatedUser)
-            .then(res => res.data)
-            .catch((error) => {
-                console.log('error', error);
+            .then(errors => {
+                if (errors.length) {
+                    console.log('Error creating course.');
+                    setErrors(errors);
+                } else {
+                    navigate('/');
+                };
+            })
+            .catch(err => {
+                console.log(err);
             });
     };
 
