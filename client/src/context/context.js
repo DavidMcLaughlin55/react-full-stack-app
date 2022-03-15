@@ -10,18 +10,17 @@ const axiosHandler = (path, method, data = null, authRequired = false, credentia
 
     const headerConfig = {
         method,
+        data: data,
         headers: {
             'Content-Type': 'application/json',
         },
     };
 
-    if (data !== null) {
-        headerConfig.body = data;
-    };
-
     if (authRequired) {
         const encodedCredentials = btoa(`${credentials.emailAddress}:${credentials.password}`);
         headerConfig.headers['Authorization'] = `Basic ${encodedCredentials}`;
+    } else {
+        headerConfig.headers['Authorization'] = `Basic ${credentials}`;
     };
 
     return axios(url, headerConfig);
@@ -30,15 +29,14 @@ const axiosHandler = (path, method, data = null, authRequired = false, credentia
 
 export const Provider = (props) => {
 
-    const [currentUser, setCurrentUser] = useState(null);
+    // const [cookie] = useState('authenticatedUser');
     const [authenticatedUser, setAuthenticatedUser] = useState(null);
 
     // Action to create new course
-    const createCourse = async (newCourse, currentUser) => {
-        const email = currentUser.emailAddress;
-        const password = currentUser.password;
-        console.log(`${email} and ${password}`);
-        const res = await axiosHandler('/courses', 'POST', newCourse, true, { email, password });
+    const createCourse = async (newCourse, authenticatedUser) => {
+        const emailAddress = authenticatedUser.emailAddress;
+        const password = authenticatedUser.password;
+        const res = await axiosHandler('/courses', 'POST', newCourse, false, { emailAddress, password });
         if (res.status === 201) {
             console.log('Course has been created.');
         } else if (res.status === 400) {
@@ -47,6 +45,7 @@ export const Provider = (props) => {
             throw new Error();
         }
     };
+
 
     // Action to create user
     const createUser = async (user) => {
@@ -75,10 +74,11 @@ export const Provider = (props) => {
 
     // Action to find and authenticate user on sign in. 
     const userSignIn = async (emailAddress, password) => {
-        setCurrentUser({ emailAddress, password });
         const user = await getUser(emailAddress, password);
         if (user !== null) {
             setAuthenticatedUser(user);
+            //Set Cookie
+            // Cookies.set('authenticatedUser', user, { expires: 1 })
         };
         return user;
     };
@@ -86,11 +86,12 @@ export const Provider = (props) => {
     // // Action to signout user.
     const userSignOut = () => {
         setAuthenticatedUser(null);
+        // Remove Cookie
+        // Cookies.remove('authenticatedUser');
     };
 
     return (
         <CourseAppContext.Provider value={{
-            currentUser,
             authenticatedUser,
             actions: {
                 createCourse: createCourse,

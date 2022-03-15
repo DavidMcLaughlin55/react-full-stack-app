@@ -5,7 +5,6 @@ import { CourseAppContext } from '../context/context';
 function Header() {
 
     const { authenticatedUser } = useContext(CourseAppContext);
-    console.log(authenticatedUser);
 
     return (
         <header>

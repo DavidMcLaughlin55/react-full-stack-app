@@ -4,7 +4,7 @@ import { CourseAppContext } from '../context/context';
 
 function CreateCourse() {
 
-    const { actions, currentUser } = useContext(CourseAppContext);
+    const { actions, authenticatedUser } = useContext(CourseAppContext);
 
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
@@ -22,7 +22,7 @@ function CreateCourse() {
     const createNewCourse = (e) => {
         e.preventDefault();
         const newCourse = { title, description, estimatedTime, materialsNeeded };
-        actions.createCourse(newCourse, currentUser)
+        actions.createCourse(newCourse, authenticatedUser)
             .then(res => res.data)
             .catch((error) => {
                 console.log('error', error);
