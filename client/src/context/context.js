@@ -11,10 +11,14 @@ const axiosHandler = (path, method, data = null, authRequired = false, credentia
 
     const headerConfig = {
         method,
-        data: data,
         headers: {
             'Content-Type': 'application/json',
         },
+    };
+
+    if (data !== null) {
+        console.log(data);
+        headerConfig.data = data;
     };
 
     if (authRequired) {
