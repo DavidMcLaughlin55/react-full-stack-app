@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { NavLink, useParams } from 'react-router-dom';
+import { NavLink, useParams, useNavigate } from 'react-router-dom';
 import { CourseAppContext } from '../context/context';
 import ReactMarkdown from 'react-markdown';
 import axios from 'axios';
@@ -23,8 +23,21 @@ function CourseDetail() {
             })
     }, [id]);
 
+    const navigate = useNavigate();
+
     const submitDeleteCourse = (e) => {
+        e.preventDefault();
         actions.deleteCourse(id, authenticatedUser)
+            .then(errors => {
+                if (errors) {
+                    console.log('Error deleting course.');
+                } else {
+                    navigate('/');
+                };
+            })
+            .catch(err => {
+                console.log(err);
+            });
     };
 
 

@@ -44,12 +44,12 @@ function UpdateCourse() {
     const submitCourseUpdate = (e) => {
         e.preventDefault();
         const userId = authenticatedUser.id;
-        const courseUpdate = { userId, title, description, estimatedTime, materialsNeeded };
-        actions.updateCourse(id, courseUpdate, authenticatedUser)
+        const courseUpdate = { id, userId, title, description, estimatedTime, materialsNeeded };
+        actions.updateCourse(courseUpdate, authenticatedUser)
             .then(errors => {
-                if (errors.length) {
+                if (errors) {
                     console.log('Error updating course.');
-                    setErrors(errors);
+                    return setErrors(errors);
                 } else {
                     navigate('/');
                 };

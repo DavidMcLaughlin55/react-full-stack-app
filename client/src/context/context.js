@@ -18,7 +18,7 @@ const axiosHandler = (path, method, data = null, authRequired = false, credentia
 
     if (data !== null) {
         console.log(data);
-        headerConfig.data = data;
+        headerConfig.data = JSON.stringify(data);
     };
 
     if (authRequired) {
@@ -52,11 +52,11 @@ export const Provider = (props) => {
     };
 
     // Action to update course
-    const updateCourse = async (id, courseUpdate, authenticatedUser) => {
+    const updateCourse = async (courseUpdate, authenticatedUser) => {
         const emailAddress = authenticatedUser.emailAddress;
         const password = authenticatedUser.password;
-        const res = await axiosHandler(`/courses/${id}`, 'PUT', courseUpdate, true, { emailAddress: emailAddress, password: password });
-        if (res.status === 201) {
+        const res = await axiosHandler(`/courses/${courseUpdate.id}`, 'PUT', courseUpdate, true, { emailAddress: emailAddress, password: password });
+        if (res.status === 204) {
             console.log('Course has been updated.');
         } else if (res.status === 400) {
             return res.data.errors;
@@ -65,6 +65,7 @@ export const Provider = (props) => {
         }
     };
 
+    // Action to delete course
     const deleteCourse = async (id, authenticatedUser) => {
         const emailAddress = authenticatedUser.emailAddress;
         const password = authenticatedUser.password;

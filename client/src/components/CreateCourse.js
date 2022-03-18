@@ -27,7 +27,7 @@ function CreateCourse() {
         const newCourse = { userId, title, description, estimatedTime, materialsNeeded };
         actions.createCourse(newCourse, authenticatedUser)
             .then(errors => {
-                if (errors.length) {
+                if (errors) {
                     console.log('Error creating course.');
                     setErrors(errors);
                 } else {
