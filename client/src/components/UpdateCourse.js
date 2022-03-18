@@ -11,12 +11,6 @@ function UpdateCourse() {
     const { id } = useParams();
     const [errors, setErrors] = useState([]);
 
-    // Form variables
-    const [title, setTitle] = useState(course.title);
-    const [description, setDescription] = useState(course.description);
-    const [estimatedTime, setEstimatedTime] = useState(course.estimatedTime);
-    const [materialsNeeded, setMaterialsNeeded] = useState(course.materialsNeeded);
-
     // GETs selected course to update.
     useEffect(() => {
         axios.get(`http://localhost:5000/api/courses/${id}`)
@@ -29,10 +23,25 @@ function UpdateCourse() {
             })
     }, [id]);
 
+    // Form variables
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
+    const [estimatedTime, setEstimatedTime] = useState('');
+    const [materialsNeeded, setMaterialsNeeded] = useState('');
+
+    // Brings user back to home page.
+    let navigate = useNavigate();
+
+    const handleCancel = (e) => {
+        e.preventDefault();
+        navigate('/');
+    };
+
     const submitCourseUpdate = (e) => {
         e.preventDefault();
         const userId = authenticatedUser.id;
-        const courseUpdate = { userId, title, description, estimatedTime, materialsNeeded };
+        console.log(authenticatedUser.id);
+        const courseUpdate = { id, userId, title, description, estimatedTime, materialsNeeded };
         actions.updateCourse(id, courseUpdate, authenticatedUser)
             .then(errors => {
                 if (errors.length) {
@@ -45,14 +54,6 @@ function UpdateCourse() {
             .catch(err => {
                 console.log(err);
             });
-    };
-
-    // Brings user back to home page.
-    let navigate = useNavigate();
-
-    const handleCancel = (e) => {
-        e.preventDefault();
-        navigate('/');
     };
 
     return (

@@ -1,9 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { NavLink, useParams } from 'react-router-dom';
+import { CourseAppContext } from '../context/context';
 import ReactMarkdown from 'react-markdown';
 import axios from 'axios';
 
 function CourseDetail() {
+
+    const { actions, authenticatedUser } = useContext(CourseAppContext);
 
     const [course, setCourse] = useState('');
     const [user, setUser] = useState('');
@@ -20,22 +23,17 @@ function CourseDetail() {
             })
     }, [id]);
 
-    const deleteCourse = () => {
-        axios.delete(`http://localhost:5000/api/courses/${id}`)
-            .then(res => {
-                console.log('Course Deleted.')
-            })
-            .catch(error => {
-                console.log('Could not delete course', error);
-            })
+    const submitDeleteCourse = (e) => {
+        actions.deleteCourse(id, authenticatedUser)
     };
+
 
     return (
         <main>
             <div className="actions--bar">
                 <div className="wrap">
                     <NavLink className="button" to={`/courses/${course.id}/update`}>Update Course</NavLink>
-                    <NavLink className="button" to={'/'} onClick={deleteCourse}>Delete Course</NavLink>
+                    <NavLink className="button" onClick={submitDeleteCourse} to={'/'}>Delete Course</NavLink>
                     <NavLink className="button button-secondary" to="/">Return to List</NavLink>
                 </div>
             </div>

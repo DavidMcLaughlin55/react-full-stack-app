@@ -51,11 +51,22 @@ export const Provider = (props) => {
     const updateCourse = async (id, courseUpdate, authenticatedUser) => {
         const emailAddress = authenticatedUser.emailAddress;
         const password = authenticatedUser.password;
-        const res = await axiosHandler(`courses/${id}`, 'PUT', courseUpdate, true, { emailAddress: emailAddress, password: password });
+        const res = await axiosHandler(`/courses/${id}`, 'PUT', courseUpdate, true, { emailAddress: emailAddress, password: password });
         if (res.status === 201) {
             console.log('Course has been updated.');
         } else if (res.status === 400) {
             return res.data.errors;
+        } else {
+            throw new Error();
+        }
+    };
+
+    const deleteCourse = async (id, authenticatedUser) => {
+        const emailAddress = authenticatedUser.emailAddress;
+        const password = authenticatedUser.password;
+        const res = await axiosHandler(`/courses/${id}`, 'DELETE', null, true, { emailAddress: emailAddress, password: password })
+        if (res.status === 204) {
+            console.log('Course has been deleted.');
         } else {
             throw new Error();
         }
@@ -110,6 +121,7 @@ export const Provider = (props) => {
             actions: {
                 createCourse: createCourse,
                 updateCourse: updateCourse,
+                deleteCourse: deleteCourse,
                 createUser: createUser,
                 getUser: getUser,
                 userSignIn: userSignIn,
