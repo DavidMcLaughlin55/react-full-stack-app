@@ -44,11 +44,17 @@ function CourseDetail() {
     return (
         <main>
             <div className="actions--bar">
-                <div className="wrap">
-                    <NavLink className="button" to={`/courses/${course.id}/update`}>Update Course</NavLink>
-                    <NavLink className="button" onClick={submitDeleteCourse} to={'/'}>Delete Course</NavLink>
-                    <NavLink className="button button-secondary" to="/">Return to List</NavLink>
-                </div>
+                {(authenticatedUser) ?
+                    <div className="wrap">
+                        <NavLink className="button" to={`/courses/${course.id}/update`}>Update Course</NavLink>
+                        <NavLink className="button" onClick={submitDeleteCourse} to={'/'}>Delete Course</NavLink>
+                        <NavLink className="button button-secondary" to="/">Return to List</NavLink>
+                    </div>
+                    :
+                    <div className="wrap">
+                        <NavLink className="button button-secondary" to="/">Return to List</NavLink>
+                    </div>
+                }
             </div>
 
             <div className="wrap">

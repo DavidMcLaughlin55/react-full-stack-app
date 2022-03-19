@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { CourseAppContext } from '../context/context';
-// import ValidationErrors from './ValidationErrors';
+import ValidationErrors from './ValidationErrors';
 
 function UserSignUp() {
 
@@ -29,7 +29,7 @@ function UserSignUp() {
             .then(errors => {
                 if (errors.length) {
                     console.log('Error signing up user.');
-                    setErrors(errors);
+                    setErrors([errors]);
                 } else {
                     actions.userSignIn(emailAddress, password)
                         .then(() => {
@@ -46,7 +46,7 @@ function UserSignUp() {
         <main>
             <div className="form--centered">
                 <h2>Sign Up</h2>
-                {/* {errors ? <ValidationErrors errorMessages={errors} /> : null} */}
+                {errors.length > 0 ? <ValidationErrors errorMessages={errors} /> : null}
                 <form onSubmit={signUpUser}>
                     <label htmlFor="firstName">First Name</label>
                     <input id="firstName" name="firstName" type="text" placeholder="First Name" value={firstName} onChange={(e) => setFirstName(e.target.value)}></input>

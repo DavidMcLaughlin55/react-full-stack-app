@@ -38,7 +38,7 @@ function UpdateCourse() {
 
     const handleCancel = (e) => {
         e.preventDefault();
-        navigate('/');
+        navigate(`/courses/${id}`);
     };
 
     const submitCourseUpdate = (e) => {

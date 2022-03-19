@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 // App Component Imports
-// import PrivateRoute from './components/PrivateRoute';
+import PrivateRoute from './components/PrivateRoute';
 import Header from './components/Header';
 import Courses from './components/Courses';
 import CourseDetail from './components/CourseDetail';
@@ -20,8 +20,10 @@ function App() {
         <Header />
         <Routes>
           <Route path='/' element={<Courses />} />
-          <Route path='/courses/create' element={<CreateCourse />} />
-          <Route path='/courses/:id/update' element={<UpdateCourse />} />
+          <Route element={<PrivateRoute />}>
+            <Route path='/courses/create' element={<CreateCourse />} />
+            <Route path='/courses/:id/update' element={<UpdateCourse />} />
+          </Route>
           <Route path='/courses/:id' element={<CourseDetail />} />
           <Route path='/signin' element={<UserSignIn />} />
           <Route path='/signup' element={<UserSignUp />} />

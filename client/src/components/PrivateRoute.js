@@ -1,11 +1,12 @@
 import React, { useContext } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
 import { CourseAppContext } from '../context/context';
 
-function PrivateRoute({ Component }) {
+// Prevents access to route if user is not authenticated and sends them to sign-in page.
+function PrivateRoute() {
 
     const { authenticatedUser } = useContext(CourseAppContext);
 
-    return authenticatedUser ? <Component /> : <Navigate to='/signin' />;
+    return (authenticatedUser ? <Outlet /> : <Navigate to='/signin' />)
 };
-export default PrivateRoute;
+export default PrivateRoute;    
