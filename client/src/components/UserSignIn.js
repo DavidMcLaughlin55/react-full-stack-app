@@ -21,7 +21,7 @@ function UserSignIn() {
         actions.userSignIn(emailAddress, password)
             .then((user) => {
                 if (user === null) {
-                    console.log('User could not be signed in.');
+                    return null;
                 } else {
                     navigate(-1);
                 }

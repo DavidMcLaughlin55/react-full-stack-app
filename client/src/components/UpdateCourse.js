@@ -34,7 +34,7 @@ function UpdateCourse() {
                 navigate('/notfound');
                 console.log('Could not fetch course data', error);
             })
-    }, [id, authenticatedUser, user, navigate]);
+    }, [id, navigate]);
 
     // Brings user back to home page.
     const handleCancel = (e) => {
@@ -49,13 +49,13 @@ function UpdateCourse() {
         actions.updateCourse(courseUpdate, authenticatedUser)
             .then(errors => {
                 if (errors) {
-                    console.log('Error updating course.');
+                    return errors;
                 } else {
                     navigate('/');
                 };
             })
             .catch(error => {
-                setErrors(error.response.data.errors)
+                setErrors(error.response.data.errors);
             });
     };
 

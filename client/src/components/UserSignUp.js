@@ -11,9 +11,9 @@ function UserSignUp() {
     const [emailAddress, setEmailAddress] = useState('');
     const [password, setPassword] = useState('');
     const [errors, setErrors] = useState(null);
+    let navigate = useNavigate();
 
     // Brings user back to home page.
-    let navigate = useNavigate();
 
     const handleCancel = (e) => {
         e.preventDefault();
@@ -37,7 +37,7 @@ function UserSignUp() {
                 };
             })
             .catch(error => {
-                setErrors(error.response.data.errors)
+                setErrors(error.response.data.errors);
             });
     };
 

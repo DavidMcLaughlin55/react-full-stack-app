@@ -21,7 +21,6 @@ function CourseDetail() {
             })
             .catch(error => {
                 navigate('/notfound');
-                console.log('Could not fetch course data', error);
             })
     }, [id, navigate]);
 
@@ -30,13 +29,13 @@ function CourseDetail() {
         actions.deleteCourse(id, authenticatedUser)
             .then(error => {
                 if (error) {
-                    console.log('Error deleting course.');
+                    return error;
                 } else {
                     navigate('/');
                 };
             })
-            .catch(err => {
-                console.log(err);
+            .catch(error => {
+                console.log('Could not fetch course details.', error);
             });
     };
 

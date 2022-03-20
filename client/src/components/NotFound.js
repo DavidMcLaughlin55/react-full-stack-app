@@ -1,6 +1,5 @@
 import React from 'react';
 
-
 function NotFound() {
 
     return (
@@ -12,6 +11,5 @@ function NotFound() {
         </main>
     )
 };
-
 
 export default NotFound;
