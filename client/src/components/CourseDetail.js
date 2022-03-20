@@ -11,6 +11,7 @@ function CourseDetail() {
     const [course, setCourse] = useState('');
     const [user, setUser] = useState('');
     const { id } = useParams();
+    const navigate = useNavigate();
 
     useEffect(() => {
         axios.get(`http://localhost:5000/api/courses/${id}`)
@@ -19,17 +20,16 @@ function CourseDetail() {
                 setUser(res.data.User);
             })
             .catch(error => {
+                navigate('/notfound');
                 console.log('Could not fetch course data', error);
             })
-    }, [id]);
-
-    const navigate = useNavigate();
+    }, [id, navigate]);
 
     const submitDeleteCourse = (e) => {
         e.preventDefault();
         actions.deleteCourse(id, authenticatedUser)
-            .then(errors => {
-                if (errors) {
+            .then(error => {
+                if (error) {
                     console.log('Error deleting course.');
                 } else {
                     navigate('/');
@@ -40,11 +40,10 @@ function CourseDetail() {
             });
     };
 
-
     return (
         <main>
             <div className="actions--bar">
-                {(authenticatedUser) ?
+                {(authenticatedUser && authenticatedUser.id === user.id) ?
                     <div className="wrap">
                         <NavLink className="button" to={`/courses/${course.id}/update`}>Update Course</NavLink>
                         <NavLink className="button" onClick={submitDeleteCourse} to={'/'}>Delete Course</NavLink>

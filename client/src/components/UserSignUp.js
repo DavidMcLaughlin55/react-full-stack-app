@@ -28,7 +28,7 @@ function UserSignUp() {
         actions.createUser(user)
             .then(errors => {
                 if (errors.length > 0) {
-                    console.log('Error signing up user.');
+                    return errors;
                 } else {
                     actions.userSignIn(emailAddress, password)
                         .then(() => {
@@ -38,7 +38,6 @@ function UserSignUp() {
             })
             .catch(error => {
                 setErrors(error.response.data.errors)
-                console.log('User could not be created', error.response.data.errors);
             });
     };
 

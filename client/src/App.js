@@ -12,6 +12,9 @@ import UserSignUp from './components/UserSignUp';
 import UserSignIn from './components/UserSignIn';
 import UserSignOut from './components/UserSignOut';
 
+// Error Route Component Imports
+import NotFound from './components/NotFound';
+
 function App() {
 
   return (
@@ -28,6 +31,8 @@ function App() {
           <Route path='/signin' element={<UserSignIn />} />
           <Route path='/signup' element={<UserSignUp />} />
           <Route path='/signout' element={<UserSignOut />} />
+          {/* Error Route */}
+          <Route path='*' element={<NotFound />} />
         </Routes>
       </div>
     </BrowserRouter >

@@ -7,10 +7,9 @@ function UserSignIn() {
     const { actions } = useContext(CourseAppContext);
     const [emailAddress, setEmailAddress] = useState('');
     const [password, setPassword] = useState('');
-
-    // Brings user back to home page.
     let navigate = useNavigate();
 
+    // Brings user back to home page.
     const handleCancel = (e) => {
         e.preventDefault();
         navigate('/');
@@ -24,7 +23,7 @@ function UserSignIn() {
                 if (user === null) {
                     console.log('User could not be signed in.');
                 } else {
-                    navigate('/');
+                    navigate(-1);
                 }
             }).catch((error) => {
                 console.log(error);

@@ -28,6 +28,10 @@ a {
     text-decoration: none;
 }
 
+p a:hover {
+    text-decoration: #019267 underline;
+}
+
 .wrap {
     max-width: 1250px;
     margin: 0 auto;
@@ -161,6 +165,7 @@ header nav a:hover {
 form {
     margin-bottom: 2.5rem;
 }
+
 label {
     display: block;
     font-weight: 300;

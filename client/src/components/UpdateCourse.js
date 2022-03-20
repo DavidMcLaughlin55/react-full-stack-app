@@ -10,6 +10,7 @@ function UpdateCourse() {
     const [user, setUser] = useState('');
     const { id } = useParams();
     const [errors, setErrors] = useState(null);
+    let navigate = useNavigate();
 
     // Form variables
     const [title, setTitle] = useState(null);
@@ -30,13 +31,12 @@ function UpdateCourse() {
                 };
             })
             .catch(error => {
+                navigate('/notfound');
                 console.log('Could not fetch course data', error);
             })
-    }, [id]);
+    }, [id, authenticatedUser, user, navigate]);
 
     // Brings user back to home page.
-    let navigate = useNavigate();
-
     const handleCancel = (e) => {
         e.preventDefault();
         navigate(`/courses/${id}`);
@@ -56,7 +56,6 @@ function UpdateCourse() {
             })
             .catch(error => {
                 setErrors(error.response.data.errors)
-                console.log('Course could not be updated', error.response.data.errors);
             });
     };
 
@@ -69,7 +68,7 @@ function UpdateCourse() {
                     <div className="main--flex">
                         <div>
                             <label htmlFor="courseTitle">Course Title</label>
-                            <input id="courseTitle" name="courseTitle" type="text" defaultValue={title} onChange={(e) => setTitle(e.target.value ? e.target.value : null)}></input>
+                            <input id="courseTitle" name="courseTitle" type="text" defaultValue={title} onChange={(e) => setTitle(e.target.value)}></input>
 
                             <p>By {user.firstName} {user.lastName}</p>
 
@@ -87,8 +86,8 @@ function UpdateCourse() {
                     <button className="button" type="submit">Update Course</button>
                     <button className="button button-secondary" onClick={handleCancel}>Cancel</button>
                 </form>
-            </div>
-        </main>
+            </div >
+        </main >
     );
 }
 

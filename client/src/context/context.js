@@ -1,5 +1,5 @@
 import React, { createContext, useState } from 'react';
-// import Cookies from 'js-cookie';
+import Cookies from 'js-cookie';
 import axios from 'axios';
 
 export const CourseAppContext = createContext();
@@ -17,15 +17,12 @@ const axiosHandler = (path, method, data = null, authRequired = false, credentia
     };
 
     if (data !== null) {
-        console.log(data);
         headerConfig.data = JSON.stringify(data);
     };
 
     if (authRequired) {
         const encodedCredentials = btoa(`${credentials.emailAddress}:${credentials.password}`);
         headerConfig.headers['Authorization'] = `Basic ${encodedCredentials}`;
-        console.log(credentials);
-        console.log(encodedCredentials);
     };
 
     return axios(url, headerConfig);
@@ -81,7 +78,6 @@ export const Provider = (props) => {
     const createUser = async (user) => {
         const res = await axiosHandler('/users', 'POST', user);
         if (res.status === 201) {
-            console.log('User created');
             return [];
         } else if (res.status === 400) {
             return res.data.errors;
@@ -108,7 +104,7 @@ export const Provider = (props) => {
         if (user !== null) {
             setAuthenticatedUser({ ...user, password });
             //Set Cookie
-            // Cookies.set('authenticatedUser', user, { expires: 1 })
+            Cookies.set('authenticatedUser', user, { expires: 1 })
         };
         return user;
     };
@@ -117,7 +113,7 @@ export const Provider = (props) => {
     const userSignOut = () => {
         setAuthenticatedUser(null);
         // Remove Cookie
-        // Cookies.remove('authenticatedUser');
+        Cookies.remove('authenticatedUser');
     };
 
     return (

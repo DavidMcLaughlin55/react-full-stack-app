@@ -12,10 +12,9 @@ function CreateCourse() {
     const [estimatedTime, setEstimatedTime] = useState('');
     const [materialsNeeded, setMaterialsNeeded] = useState('');
     const [errors, setErrors] = useState(null);
-
-    // Brings user back to home page.
     let navigate = useNavigate();
 
+    // Brings user back to home page.
     const handleCancel = (e) => {
         e.preventDefault();
         navigate('/');
@@ -27,9 +26,9 @@ function CreateCourse() {
         console.log(authenticatedUser.id);
         const newCourse = { userId, title, description, estimatedTime, materialsNeeded };
         actions.createCourse(newCourse, authenticatedUser)
-            .then(errors => {
-                if (errors) {
-                    console.log('Error creating course.');
+            .then(error => {
+                if (error) {
+                    return error;
                 } else {
                     navigate('/');
                 };
@@ -51,7 +50,7 @@ function CreateCourse() {
                             <label htmlFor="courseTitle">Course Title</label>
                             <input id="courseTitle" name="courseTitle" type="text" value={title} onChange={(e) => setTitle(e.target.value)}></input>
 
-                            <p>By Joe Smith</p>
+                            <p>By {authenticatedUser.firstName} {authenticatedUser.lastName}</p>
 
                             <label htmlFor="courseDescription">Course Description</label>
                             <textarea id="courseDescription" name="courseDescription" value={description} onChange={(e) => setDescription(e.target.value)}></textarea>
