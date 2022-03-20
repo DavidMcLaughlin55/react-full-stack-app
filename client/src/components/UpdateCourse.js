@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { CourseAppContext } from '../context/context';
+import ValidationErrors from './ValidationErrors';
 import axios from 'axios';
 
 function UpdateCourse() {
@@ -8,11 +9,11 @@ function UpdateCourse() {
     const { actions, authenticatedUser } = useContext(CourseAppContext);
     const [user, setUser] = useState('');
     const { id } = useParams();
-    const [errors, setErrors] = useState([]);
+    const [errors, setErrors] = useState(null);
 
     // Form variables
-    const [title, setTitle] = useState();
-    const [description, setDescription] = useState('');
+    const [title, setTitle] = useState(null);
+    const [description, setDescription] = useState(null);
     const [estimatedTime, setEstimatedTime] = useState('');
     const [materialsNeeded, setMaterialsNeeded] = useState('');
 
@@ -49,13 +50,13 @@ function UpdateCourse() {
             .then(errors => {
                 if (errors) {
                     console.log('Error updating course.');
-                    return setErrors(errors);
                 } else {
                     navigate('/');
                 };
             })
-            .catch(err => {
-                console.log(err);
+            .catch(error => {
+                setErrors(error.response.data.errors)
+                console.log('Course could not be updated', error.response.data.errors);
             });
     };
 
@@ -63,11 +64,12 @@ function UpdateCourse() {
         <main>
             <div className="wrap">
                 <h2>Update Course</h2>
+                {errors ? <ValidationErrors errorMessages={errors} /> : null}
                 <form onSubmit={submitCourseUpdate}>
                     <div className="main--flex">
                         <div>
                             <label htmlFor="courseTitle">Course Title</label>
-                            <input id="courseTitle" name="courseTitle" type="text" defaultValue={title} onChange={(e) => setTitle(e.target.value)}></input>
+                            <input id="courseTitle" name="courseTitle" type="text" defaultValue={title} onChange={(e) => setTitle(e.target.value ? e.target.value : null)}></input>
 
                             <p>By {user.firstName} {user.lastName}</p>
 

@@ -65,7 +65,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         len: {
           args: [8, 20],
-          message: 'The password should be between 8 and 20 characters in length.',
+          msg: 'The password should be between 8 and 20 characters in length.',
         },
         // Encrypt Password
         set(password) {

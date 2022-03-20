@@ -10,7 +10,7 @@ function UserSignUp() {
     const [lastName, setLastName] = useState('');
     const [emailAddress, setEmailAddress] = useState('');
     const [password, setPassword] = useState('');
-    const [errors, setErrors] = useState([]);
+    const [errors, setErrors] = useState(null);
 
     // Brings user back to home page.
     let navigate = useNavigate();
@@ -27,9 +27,8 @@ function UserSignUp() {
         console.log(user);
         actions.createUser(user)
             .then(errors => {
-                if (errors.length) {
+                if (errors.length > 0) {
                     console.log('Error signing up user.');
-                    setErrors([errors]);
                 } else {
                     actions.userSignIn(emailAddress, password)
                         .then(() => {
@@ -37,8 +36,9 @@ function UserSignUp() {
                         });
                 };
             })
-            .catch(err => {
-                console.log(err);
+            .catch(error => {
+                setErrors(error.response.data.errors)
+                console.log('User could not be created', error.response.data.errors);
             });
     };
 
@@ -46,7 +46,7 @@ function UserSignUp() {
         <main>
             <div className="form--centered">
                 <h2>Sign Up</h2>
-                {errors.length > 0 ? <ValidationErrors errorMessages={errors} /> : null}
+                {errors ? <ValidationErrors errorMessages={errors} /> : null}
                 <form onSubmit={signUpUser}>
                     <label htmlFor="firstName">First Name</label>
                     <input id="firstName" name="firstName" type="text" placeholder="First Name" value={firstName} onChange={(e) => setFirstName(e.target.value)}></input>

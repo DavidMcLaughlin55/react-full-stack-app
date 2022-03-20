@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CourseAppContext } from '../context/context';
+import ValidationErrors from './ValidationErrors';
 
 function CreateCourse() {
 
@@ -10,7 +11,7 @@ function CreateCourse() {
     const [description, setDescription] = useState('');
     const [estimatedTime, setEstimatedTime] = useState('');
     const [materialsNeeded, setMaterialsNeeded] = useState('');
-    const [errors, setErrors] = useState([]);
+    const [errors, setErrors] = useState(null);
 
     // Brings user back to home page.
     let navigate = useNavigate();
@@ -29,13 +30,12 @@ function CreateCourse() {
             .then(errors => {
                 if (errors) {
                     console.log('Error creating course.');
-                    setErrors(errors);
                 } else {
                     navigate('/');
                 };
             })
-            .catch(err => {
-                console.log(err);
+            .catch(error => {
+                setErrors(error.response.data.errors);
             });
     };
 
@@ -44,6 +44,7 @@ function CreateCourse() {
         <main>
             <div className="wrap">
                 <h2>Create Course</h2>
+                {errors ? <ValidationErrors errorMessages={errors} /> : null}
                 <form onSubmit={createNewCourse}>
                     <div className="main--flex">
                         <div>
