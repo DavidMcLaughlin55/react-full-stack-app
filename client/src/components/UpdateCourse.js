@@ -68,19 +68,19 @@ function UpdateCourse() {
                     <div className="main--flex">
                         <div>
                             <label htmlFor="courseTitle">Course Title</label>
-                            <input id="courseTitle" name="courseTitle" type="text" defaultValue={title} onChange={(e) => setTitle(e.target.value)}></input>
+                            <input id="courseTitle" name="courseTitle" type="text" value={title ? title : ''} onChange={(e) => setTitle(e.target.value)}></input>
 
                             <p>By {user.firstName} {user.lastName}</p>
 
                             <label htmlFor="courseDescription">Course Description</label>
-                            <textarea id="courseDescription" name="courseDescription" defaultValue={description} onChange={(e) => setDescription(e.target.value)} ></textarea>
+                            <textarea id="courseDescription" name="courseDescription" value={description ? description : ''} onChange={(e) => setDescription(e.target.value)} ></textarea>
                         </div>
                         <div>
                             <label htmlFor="estimatedTime">Estimated Time</label>
-                            <input id="estimatedTime" name="estimatedTime" type="text" defaultValue={estimatedTime} onChange={(e) => setEstimatedTime(e.target.value)}></input>
+                            <input id="estimatedTime" name="estimatedTime" type="text" value={estimatedTime ? estimatedTime : ''} onChange={(e) => setEstimatedTime(e.target.value)}></input>
 
                             <label htmlFor="materialsNeeded">Materials Needed</label>
-                            <textarea id="materialsNeeded" name="materialsNeeded" defaultValue={materialsNeeded} onChange={(e) => setMaterialsNeeded(e.target.value)}></textarea>
+                            <textarea id="materialsNeeded" name="materialsNeeded" value={materialsNeeded ? materialsNeeded : ''} onChange={(e) => setMaterialsNeeded(e.target.value)}></textarea>
                         </div>
                     </div>
                     <button className="button" type="submit">Update Course</button>
